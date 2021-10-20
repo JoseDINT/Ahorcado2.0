@@ -1,0 +1,43 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <ApplicationIcon>assets\hangman.ico</ApplicationIcon>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="assets\hangman.ico" />
+    <None Remove="assets\img\0.jpg" />
+    <None Remove="assets\img\1.jpg" />
+    <None Remove="assets\img\10.jpg" />
+    <None Remove="assets\img\2.jpg" />
+    <None Remove="assets\img\3.jpg" />
+    <None Remove="assets\img\4.jpg" />
+    <None Remove="assets\img\5.jpg" />
+    <None Remove="assets\img\6.jpg" />
+    <None Remove="assets\img\7.jpg" />
+    <None Remove="assets\img\8.jpg" />
+    <None Remove="assets\img\9.jpg" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="assets\hangman.ico" />
+    <Resource Include="assets\img\9.jpg" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="assets\img\0.jpg" />
+    <Resource Include="assets\img\1.jpg" />
+    <Resource Include="assets\img\10.jpg" />
+    <Resource Include="assets\img\2.jpg" />
+    <Resource Include="assets\img\3.jpg" />
+    <Resource Include="assets\img\4.jpg" />
+    <Resource Include="assets\img\5.jpg" />
+    <Resource Include="assets\img\6.jpg" />
+    <Resource Include="assets\img\7.jpg" />
+    <Resource Include="assets\img\8.jpg" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,36 @@
+﻿<Window x:Class="Ahorcado.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Ahorcado"
+        mc:Ignorable="d"
+        Title="Ahorcado"  MinHeight="600" MinWidth="800" Icon="/assets/hangman.ico">
+    <!--Panel Principal-->
+    <Grid>
+        <!--Definición de 4 Rows y 2 Columns-->
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1"></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition Height="50"></RowDefinition>
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <!--Imagen juego 3x1-->
+        <WrapPanel Style="{StaticResource ResourceKey=ImagenPanelEstilo}">
+            <Image x:Name="EstadoJugadorImage" Source="/assets/img/4.jpg"/>
+        </WrapPanel>
+        <!--Botones Nueva partida y Rendirse-->
+        <StackPanel Grid.Row="3" Grid.Column="0" Orientation="Horizontal" Margin="10">
+            <Button Margin="10,0" Width="120">Nueva partida</Button>
+            <Button Width="100">Rendirse</Button>
+        </StackPanel>
+
+        <TextBlock Grid.Row="0" Grid.Column="1" FontSize="35" Margin="0,20" FontFamily="Rubik">Ahorcado</TextBlock>
+        
+    </Grid>
+</Window>
