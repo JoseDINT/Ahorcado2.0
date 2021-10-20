@@ -23,6 +23,47 @@ namespace Ahorcado
         public MainWindow()
         {
             InitializeComponent();
+
+            //Crear botones
+            char[] abecedario = Enumerable.Range('A', 'Z' - 'A' + 1).Select(i => (Char)i).ToArray();
+
+            foreach (var letra in abecedario)
+            {
+                Button letras = new Button();
+                letras.Tag = letra;
+                TextBlock texto = new TextBlock();
+                texto.Text = letra.ToString();
+                Viewbox box = new Viewbox();
+                box.Child = texto;
+                letras.Content = box;
+                LetrasUniformGrid.Children.Add(letras);
+                Style = (Style)this.Resources["botonesLetra"];
+            }
+
+            //Crear contenedor ?? NO uniform grid JAVI
+
+
+            
+
         }
+
+        //private void Button_Click(object sender, RoutedEventArgs e)
+        //{
+        //    ResultadoTextBlock.Text += ((Button)sender).Tag.ToString();
+        //}
     }
+
+
+
+
+
+
 }
+
+
+
+
+
+
+
+

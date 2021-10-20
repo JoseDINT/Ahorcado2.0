@@ -10,10 +10,10 @@
     <Grid>
         <!--Definición de 4 Rows y 2 Columns-->
         <Grid.RowDefinitions>
-            <RowDefinition Height="1"></RowDefinition>
             <RowDefinition></RowDefinition>
             <RowDefinition></RowDefinition>
-            <RowDefinition Height="50"></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
         </Grid.RowDefinitions>
 
         <Grid.ColumnDefinitions>
@@ -26,11 +26,16 @@
         </WrapPanel>
         <!--Botones Nueva partida y Rendirse-->
         <StackPanel Grid.Row="3" Grid.Column="0" Orientation="Horizontal" Margin="10">
-            <Button Margin="10,0" Width="120">Nueva partida</Button>
-            <Button Width="100">Rendirse</Button>
+            <Button Margin="10,0" Width="120" Style="{StaticResource OpcionesBotones}">Nueva partida</Button>
+            <Button Width="100" Style="{StaticResource OpcionesBotones}">Rendirse</Button>
         </StackPanel>
 
-        <TextBlock Grid.Row="0" Grid.Column="1" FontSize="35" Margin="0,20" FontFamily="Rubik">Ahorcado</TextBlock>
-        
+        <!--Titulo Ahorcado-->
+        <TextBlock Grid.Row="0" Grid.Column="1" FontSize="35">Ahorcado</TextBlock>
+
+        <UniformGrid Grid.Row="2" Grid.Column="1" x:Name="LetrasUniformGrid"/>
+
+
+
     </Grid>
 </Window>

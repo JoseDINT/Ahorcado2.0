@@ -4,11 +4,39 @@
              xmlns:local="clr-namespace:Ahorcado"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
+        <!--Estilo WrapPanel-->
         <Style TargetType="{x:Type WrapPanel}" x:Key="ImagenPanelEstilo">
             <Setter Property="Margin" Value="20"/>
             <Setter Property="Grid.Row" Value="0"/>
             <Setter Property="Grid.Column" Value="0"/>
             <Setter Property="Grid.RowSpan" Value="3"/>
         </Style>
+        
+        <!--JAVI ??-->
+        <!--Estilo TexBlock-->
+        <Style TargetType="{x:Type TextBlock}">
+            <Setter Property="Margin" Value="0,10"/>
+            <Setter Property="FontFamily" Value="Rubik"/>
+            <!--<Setter Property="FontSize" Value="30"/>-->
+        </Style>
+        
+        <!--Botones-->
+        <Style TargetType="{x:Type Button}" x:Key="OpcionesBotones">
+            <Setter Property="Height" Value="40"/>
+            <Setter Property="FontSize" Value="15"/>
+            <Setter Property="Button.Effect" >
+                <Setter.Value>
+                    <DropShadowEffect/>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!--Botones letras-->
+        <Style TargetType="{x:Type Button}" x:Key="botonesLetra">
+            <Setter Property="Margin" Value="10"/>
+            <Setter Property="Background" Value="Aqua"/>
+        </Style>
+
+
     </Application.Resources>
 </Application>
