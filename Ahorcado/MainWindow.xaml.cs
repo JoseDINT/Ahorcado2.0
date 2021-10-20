@@ -43,7 +43,10 @@ namespace Ahorcado
             //Crear contenedor ?? NO uniform grid JAVI
 
 
-            
+            /*for (char letter = 'A'; letter <= 'Z'; letter++)
+{
+     Debug.WriteLine(letter);
+}*/
 
         }
 

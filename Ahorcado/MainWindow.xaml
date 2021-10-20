@@ -33,7 +33,9 @@
         <!--Titulo Ahorcado-->
         <TextBlock Grid.Row="0" Grid.Column="1" FontSize="35">Ahorcado</TextBlock>
 
-        <UniformGrid Grid.Row="2" Grid.Column="1" x:Name="LetrasUniformGrid"/>
+        <UniformGrid Grid.Row="2" Grid.Column="1" x:Name="LetrasUniformGrid">
+            
+        </UniformGrid>
 
 
 
