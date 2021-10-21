@@ -6,8 +6,11 @@
         xmlns:local="clr-namespace:Ahorcado"
         mc:Ignorable="d"
         Title="Ahorcado"  MinHeight="600" MinWidth="800" Icon="/assets/hangman.ico">
+    <Window.Resources>
+        
+    </Window.Resources>
     <!--Panel Principal-->
-    <Grid>
+    <Grid Background="Beige">
         <!--Definición de 4 Rows y 2 Columns-->
         <Grid.RowDefinitions>
             <RowDefinition></RowDefinition>
@@ -26,14 +29,14 @@
         </WrapPanel>
         <!--Botones Nueva partida y Rendirse-->
         <StackPanel Grid.Row="3" Grid.Column="0" Orientation="Horizontal" Margin="10">
-            <Button Margin="10,0" Width="120" Style="{StaticResource OpcionesBotones}">Nueva partida</Button>
-            <Button Width="100" Style="{StaticResource OpcionesBotones}">Rendirse</Button>
+            <Button x:Name="NuevaPartidaButton"  Style="{StaticResource NuevaPartida}">Nueva partida</Button>
+            <Button Width="100" Style="{StaticResource Rendirse}">Rendirse</Button>
         </StackPanel>
 
         <!--Titulo Ahorcado-->
         <TextBlock Grid.Row="0" Grid.Column="1" FontSize="35">Ahorcado</TextBlock>
-
-        <UniformGrid Grid.Row="2" Grid.Column="1" x:Name="LetrasUniformGrid">
+        
+        <UniformGrid Grid.Row="2" Grid.Column="1" x:Name="LetrasUniformGrid" Rows="3" Columns="9" Margin="20">
             
         </UniformGrid>
 

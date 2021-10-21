@@ -25,9 +25,13 @@ namespace Ahorcado
             InitializeComponent();
 
             //Crear botones
-            char[] abecedario = Enumerable.Range('A', 'Z' - 'A' + 1).Select(i => (Char)i).ToArray();
 
-            foreach (var letra in abecedario)
+            //Hacer un bitmap de imagenes para que nos muestre los cambios
+
+            List<Char> abc = Enumerable.Range('A', 'Z' - 'A' + 1).Select(i => (Char)i).ToList<Char>();
+            abc.Insert(14,'Ñ');
+
+            foreach (var letra in abc)
             {
                 Button letras = new Button();
                 letras.Tag = letra;
@@ -37,23 +41,34 @@ namespace Ahorcado
                 box.Child = texto;
                 letras.Content = box;
                 LetrasUniformGrid.Children.Add(letras);
-                Style = (Style)this.Resources["botonesLetra"];
+                letras.Click += Button_Click;
+                letras.Style = (Style)Application.Current.Resources["botonesLetra"];
             }
 
-            //Crear contenedor ?? NO uniform grid JAVI
+            NuevaPartidaButton.Click += Reiniciar_Botones;
 
-
-            /*for (char letter = 'A'; letter <= 'Z'; letter++)
-{
-     Debug.WriteLine(letter);
-}*/
-
+            //this es para la ventana actual y si queremos hacer referencia al
+            //app.xmal usaremos Application.Current.Rs
         }
 
-        //private void Button_Click(object sender, RoutedEventArgs e)
-        //{
-        //    ResultadoTextBlock.Text += ((Button)sender).Tag.ToString();
-        //}
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            //FALTA PONER POR TECLADO
+            Button boton = (Button)sender;               
+            boton.IsEnabled = false;
+        }
+
+        private void Reiniciar_Botones(object sender, RoutedEventArgs e)
+        {
+            
+            //Hay que hacer un foreach de los botones que tenemos del children del contenedor 
+            foreach(Button b in LetrasUniformGrid.Children)
+            {
+                b.IsEnabled = true;
+            }
+        }
+
+        //Añadir letras y letras está en letras , letras acertadas
     }
 
 

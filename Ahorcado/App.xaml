@@ -12,16 +12,15 @@
             <Setter Property="Grid.RowSpan" Value="3"/>
         </Style>
         
-        <!--JAVI ??-->
+        <!--Dentro del botón en su estructura hay un textblock-->
         <!--Estilo TexBlock-->
         <Style TargetType="{x:Type TextBlock}">
             <Setter Property="Margin" Value="0,10"/>
             <Setter Property="FontFamily" Value="Rubik"/>
             <!--<Setter Property="FontSize" Value="30"/>-->
         </Style>
-        
-        <!--Botones-->
-        <Style TargetType="{x:Type Button}" x:Key="OpcionesBotones">
+
+        <Style TargetType="{x:Type Button}" x:Key="Opciones">
             <Setter Property="Height" Value="40"/>
             <Setter Property="FontSize" Value="15"/>
             <Setter Property="Button.Effect" >
@@ -30,13 +29,29 @@
                 </Setter.Value>
             </Setter>
         </Style>
+        <!--Botones-->
+        <Style TargetType="{x:Type Button}" x:Key="NuevaPartida" BasedOn="{StaticResource Opciones}">
+            <Setter Property="Margin" Value="10,0"/>
+            <Setter Property="Width" Value="120"/>
+            <!--<EventSetter Event="Click" Handler="Reiniciar_Botones"/>-->
+        </Style>
+
+        <!--Botones-->
+        <Style TargetType="{x:Type Button}" x:Key="Rendirse" BasedOn="{StaticResource Opciones}">
+            <Setter Property="Width" Value="100"/>
+        </Style>
 
         <!--Botones letras-->
         <Style TargetType="{x:Type Button}" x:Key="botonesLetra">
-            <Setter Property="Margin" Value="10"/>
-            <Setter Property="Background" Value="Aqua"/>
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="Background" Value="#FF837E7E"/>
+            <Setter Property="Button.Effect" >
+                <Setter.Value>
+                    <DropShadowEffect/>
+                </Setter.Value>
+            </Setter>
+            
         </Style>
-
-
+        
     </Application.Resources>
 </Application>
