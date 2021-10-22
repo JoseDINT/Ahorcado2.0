@@ -33,7 +33,6 @@
         <Style TargetType="{x:Type Button}" x:Key="NuevaPartida" BasedOn="{StaticResource Opciones}">
             <Setter Property="Margin" Value="10,0"/>
             <Setter Property="Width" Value="120"/>
-            <!--<EventSetter Event="Click" Handler="Reiniciar_Botones"/>-->
         </Style>
 
         <!--Botones-->
