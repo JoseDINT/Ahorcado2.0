@@ -49,8 +49,15 @@
                     <DropShadowEffect/>
                 </Setter.Value>
             </Setter>
-            
         </Style>
-        
+
+        <!--Botones letras-->
+        <Style TargetType="{x:Type TextBlock}" x:Key="contenedorPalabra">
+            <Setter Property="Margin" Value="30"/>
+            <Setter Property="Width" Value="800"/>
+            <Setter Property="Height" Value="200"/>
+            <Setter Property="Background" Value="#FF837E7E"/>
+        </Style>
+
     </Application.Resources>
 </Application>

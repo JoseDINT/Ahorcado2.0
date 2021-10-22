@@ -50,12 +50,38 @@ namespace Ahorcado
             //this es para la ventana actual y si queremos hacer referencia al
             //app.xmal usaremos Application.Current.Rs
 
-            TextBox palabra = new TextBox();
-            palabra.Width = 100;
-            palabra.Height = 100;
-            PalabraWrapPanel.Children.Add(palabra);
+            TextBlock palabra = new TextBlock();
+            ScrollViewer scroll = new ScrollViewer();
+            scroll.Content = palabra;
+            scroll.HorizontalScrollBarVisibility = ScrollBarVisibility.Visible;
+            scroll.VerticalScrollBarVisibility = ScrollBarVisibility.Hidden;
+            //Para los scrollview debemos poner los
+            PalabraWrapPanel.Children.Add(scroll);
+            palabra.Style = (Style)Application.Current.Resources["contenedorPalabra"];
+
+            List<String> listaPalabras = new List<string>() {"Murcia", "Mojaca", "Lerida", "Pamplona", "Valencia" };
+
+            Random seed = new Random();
+
+
+            //List<Char> palabras = new List<Char>(); 
+
+            StringBuilder sb = new StringBuilder();
+
+
+            for (int i = 0; i < pAdivina.Length; i++)
+            {
+                palabra.Text = sb.Append(" _ ").ToString();
+
+                if (pAdivina.Equals(letrillas))
+                {
+                    sb.Replace( '_', letrillas);
+
+                }
+                palabra.FontSize = 40;
+            }
         }
-        
+
         //Clicar sobre botón
         private void Button_Click(object sender, RoutedEventArgs e)
         {
@@ -79,8 +105,8 @@ namespace Ahorcado
 
             foreach (Button b in LetrasUniformGrid.Children)
             {
-                if(b.Tag.ToString() == e.Key.ToString() )
-                b.IsEnabled = false;
+                if (b.Tag.ToString() == e.Key.ToString())
+                    b.IsEnabled = false;
             }
         }
 
