@@ -28,7 +28,7 @@
         <!--Botones Nueva partida y Rendirse-->
         <StackPanel Grid.Row="3" Grid.Column="0" Orientation="Horizontal" Margin="10">
             <Button x:Name="NuevaPartidaButton"  Style="{StaticResource NuevaPartida}">Nueva partida</Button>
-            <Button Style="{StaticResource Rendirse}">Rendirse</Button>
+            <Button Style="{StaticResource Rendirse}" x:Name="RendirseButton">Rendirse</Button>
         </StackPanel>
 
         <!--Titulo Ahorcado-->

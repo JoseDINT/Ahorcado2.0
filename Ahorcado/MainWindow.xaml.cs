@@ -15,13 +15,17 @@ using System.Windows.Shapes;
 
 namespace Ahorcado
 {
+
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
     public partial class MainWindow : Window
     {
+        char[] palabraArray;
+        StringBuilder sb = new StringBuilder();
         public MainWindow()
         {
+
             InitializeComponent();
 
             //Crear botones
@@ -46,6 +50,7 @@ namespace Ahorcado
             }
 
             NuevaPartidaButton.Click += Reiniciar_Botones;
+            RendirseButton.Click += Perder;
 
             //this es para la ventana actual y si queremos hacer referencia al
             //app.xmal usaremos Application.Current.Rs
@@ -55,44 +60,71 @@ namespace Ahorcado
             scroll.Content = palabra;
             scroll.HorizontalScrollBarVisibility = ScrollBarVisibility.Visible;
             scroll.VerticalScrollBarVisibility = ScrollBarVisibility.Hidden;
-            //Para los scrollview debemos poner los
+            //Para los scrollview
             PalabraWrapPanel.Children.Add(scroll);
             palabra.Style = (Style)Application.Current.Resources["contenedorPalabra"];
 
-            List<String> listaPalabras = new List<string>() {"Murcia", "Mojaca", "Lerida", "Pamplona", "Valencia" };
+            String palabraSecreta = PalabraRandom();
+            
+            palabraArray = palabraSecreta.ToCharArray(0, palabraSecreta.Length);
+            StringBuilder adivinar = new StringBuilder(palabraSecreta);
 
-            Random seed = new Random();
-
-
-            //List<Char> palabras = new List<Char>(); 
-
-            StringBuilder sb = new StringBuilder();
-
-
-            for (int i = 0; i < pAdivina.Length; i++)
-            {
-                palabra.Text = sb.Append(" _ ").ToString();
-
-                if (pAdivina.Equals(letrillas))
-                {
-                    sb.Replace( '_', letrillas);
-
-                }
-                palabra.FontSize = 40;
-            }
+            OfuscaPalabra(palabraSecreta, palabra);
         }
 
-        //Clicar sobre botón
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private int Stage { get; set; }
+        public void Comprobar(char letra)
         {
 
+            if (palabraArray.Contains(letra))
+            {
+                if (Stage <= 9)
+                {
+                    Stage++;
+                    EstadoJugadorImage.Source = GetStageImage();
+                }
+                else
+                {
+                    MessageBox.Show("Has perdido");
+                }
+            }
+
+            //if acertado compara el texto del textblock vs la.
+        }
+
+        public BitmapImage GetStageImage()
+        {
+            return new BitmapImage(
+                new Uri(System.IO.Path.Combine(
+                    Environment.CurrentDirectory,
+                    "../../../assets/img/" + Stage + ".jpg")));
+        }
+
+        private String OfuscaPalabra(String cadena, TextBlock contenedor)
+        {
+            for (int i = 0; i < cadena.Length; i++)
+                contenedor.Text = sb.Append('_').ToString();
+            return sb.ToString();
+        }
+
+        public String PalabraRandom()
+        {
+            Random gen = new Random();
+            List<String> listaPalabras = new List<string>() { "MURCIA", "MOJACA", "LERIDA", "PAMPLONA" };
+            return listaPalabras[gen.Next(0, listaPalabras.Count)];
+        }
+
+        //EVENTOS
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
             Button boton = (Button)sender;
             boton.IsEnabled = false;
+            letraTeclado = (char)boton.Tag;
+            Comprobar(letraTeclado);
         }
 
         private void Reiniciar_Botones(object sender, RoutedEventArgs e)
         {
-
             //Hay que hacer un foreach de los botones que tenemos del children del contenedor 
             foreach (Button b in LetrasUniformGrid.Children)
             {
@@ -100,28 +132,25 @@ namespace Ahorcado
             }
         }
 
+        private void Perder(object sender, RoutedEventArgs e)
+        {
+            Stage = 10;
+            EstadoJugadorImage.Source = GetStageImage();
+            MessageBox.Show("Te has rendido");
+        }
+
         private void Window_KeyDown(object sender, KeyEventArgs e)
         {
-
             foreach (Button b in LetrasUniformGrid.Children)
             {
                 if (b.Tag.ToString() == e.Key.ToString())
                     b.IsEnabled = false;
+                Comprobar((char)b.Tag);
             }
         }
-
-        //Añadir letras y letras está en letras , letras acertadas
-
-
     }
 
-
-
-
-
-
 }
-
 
 
 
