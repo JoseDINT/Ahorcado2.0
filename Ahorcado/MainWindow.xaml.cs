@@ -22,7 +22,10 @@ namespace Ahorcado
     public partial class MainWindow : Window
     {
         char[] palabraArray;
+        String palabraSecreta;
         StringBuilder sb = new StringBuilder();
+        String adivinar;
+        TextBlock palabra;
         public MainWindow()
         {
 
@@ -30,7 +33,6 @@ namespace Ahorcado
 
             //Crear botones
 
-            //Hacer un bitmap de imagenes para que nos muestre los cambios
 
             List<Char> abcedario = Enumerable.Range('A', 'Z' - 'A' + 1).Select(i => (Char)i).ToList<Char>();
             abcedario.Insert(14, 'Ñ');
@@ -49,13 +51,13 @@ namespace Ahorcado
                 letras.Style = (Style)Application.Current.Resources["botonesLetra"];
             }
 
-            NuevaPartidaButton.Click += Reiniciar_Botones;
-            RendirseButton.Click += Perder;
+            NuevaPartidaButton.Click += Nueva_Partida;
+            RendirseButton.Click += Rendirse;
 
             //this es para la ventana actual y si queremos hacer referencia al
             //app.xmal usaremos Application.Current.Rs
 
-            TextBlock palabra = new TextBlock();
+            palabra = new TextBlock();
             ScrollViewer scroll = new ScrollViewer();
             scroll.Content = palabra;
             scroll.HorizontalScrollBarVisibility = ScrollBarVisibility.Visible;
@@ -64,32 +66,63 @@ namespace Ahorcado
             PalabraWrapPanel.Children.Add(scroll);
             palabra.Style = (Style)Application.Current.Resources["contenedorPalabra"];
 
-            String palabraSecreta = PalabraRandom();
-            
-            palabraArray = palabraSecreta.ToCharArray(0, palabraSecreta.Length);
-            StringBuilder adivinar = new StringBuilder(palabraSecreta);
+            palabraSecreta = PalabraRandom();
+
+            palabraArray = palabraSecreta.ToCharArray(0, palabraSecreta.Length - 1);
+            adivinar = palabraSecreta;
+
 
             OfuscaPalabra(palabraSecreta, palabra);
         }
 
-        private int Stage { get; set; }
+        private int estado = 4;
         public void Comprobar(char letra)
         {
-
-            if (palabraArray.Contains(letra))
+            //for (int i = 0; i < length; i++)
+            //if (estado <= 9)
+            //{
+            //    estado++;
+            //    EstadoJugadorImage.Source = GetStageImage();
+            //}
+            //else
+            //{
+            //    FinalizarPartida();
+            //}
+            bool terminado = false;
+            do
             {
-                if (Stage <= 9)
+                string siguienteMostrar = "";
+
+                for (int i = 0; i < adivinar.Length; i++)
                 {
-                    Stage++;
+                    if (letra == adivinar[i])
+                        sb[i] += letra;
+                    else
+                        sb[i] += sb[i];
+                }
+                String siguienteMostar = sb.ToString();
+
+                // 6: Comprobar si ha terminado: si el usuario se queda sin intentos
+                // o adivina toda la palabra.
+                if (siguienteMostar.IndexOf("-") < 0)
+                {
+                    GanarPartida();
+                    terminado = true;
+                }
+
+                if (estado <= 9)
+                {
+                    estado++;
                     EstadoJugadorImage.Source = GetStageImage();
                 }
                 else
                 {
-                    MessageBox.Show("Has perdido");
+                    FinalizarPartida();
                 }
-            }
 
-            //if acertado compara el texto del textblock vs la.
+                Console.WriteLine();
+            }
+            while (!terminado);
         }
 
         public BitmapImage GetStageImage()
@@ -97,21 +130,34 @@ namespace Ahorcado
             return new BitmapImage(
                 new Uri(System.IO.Path.Combine(
                     Environment.CurrentDirectory,
-                    "../../../assets/img/" + Stage + ".jpg")));
+                    "../../../assets/img/" + estado + ".jpg")));
         }
 
         private String OfuscaPalabra(String cadena, TextBlock contenedor)
         {
             for (int i = 0; i < cadena.Length; i++)
-                contenedor.Text = sb.Append('_').ToString();
+                contenedor.Text = sb.Append("_").ToString();
             return sb.ToString();
+
         }
 
         public String PalabraRandom()
         {
             Random gen = new Random();
-            List<String> listaPalabras = new List<string>() { "MURCIA", "MOJACA", "LERIDA", "PAMPLONA" };
+            List<String> listaPalabras = new List<string>() { "MURCIA", "MOJACA" };
             return listaPalabras[gen.Next(0, listaPalabras.Count)];
+        }
+
+        public void GanarPartida()
+        {
+            MessageBox.Show("La palabra era " + adivinar);
+        }
+        public void FinalizarPartida()
+        {
+            estado = 4;
+            EstadoJugadorImage.Source = GetStageImage();
+
+            MessageBox.Show("Lo siento era" + adivinar);
         }
 
         //EVENTOS
@@ -119,34 +165,41 @@ namespace Ahorcado
         {
             Button boton = (Button)sender;
             boton.IsEnabled = false;
-            letraTeclado = (char)boton.Tag;
+            char letraTeclado = (char)boton.Tag;
             Comprobar(letraTeclado);
         }
 
-        private void Reiniciar_Botones(object sender, RoutedEventArgs e)
+        private void Nueva_Partida(object sender, RoutedEventArgs e)
         {
+            estado = 4;
+            EstadoJugadorImage.Source = GetStageImage();
             //Hay que hacer un foreach de los botones que tenemos del children del contenedor 
             foreach (Button b in LetrasUniformGrid.Children)
             {
                 b.IsEnabled = true;
             }
+            MessageBox.Show("Nueva Partida");
         }
 
-        private void Perder(object sender, RoutedEventArgs e)
+        private void Rendirse(object sender, RoutedEventArgs e)
         {
-            Stage = 10;
+            estado = 10;
             EstadoJugadorImage.Source = GetStageImage();
             MessageBox.Show("Te has rendido");
         }
 
         private void Window_KeyDown(object sender, KeyEventArgs e)
         {
+
             foreach (Button b in LetrasUniformGrid.Children)
             {
                 if (b.Tag.ToString() == e.Key.ToString())
+                {
                     b.IsEnabled = false;
-                Comprobar((char)b.Tag);
+                    Comprobar((char)b.Tag);
+                }
             }
+
         }
     }
 
