@@ -21,21 +21,44 @@ namespace Ahorcado
     /// </summary>
     public partial class MainWindow : Window
     {
-        char[] palabraArray;
-        String palabraSecreta;
-        StringBuilder sb = new StringBuilder();
-        String adivinar;
-        TextBlock palabra;
-        private int estado = 4;
+        List<Char> abcedario;
+        List<BitmapImage> imagenes;
+        List<TextBlock> camposTexto;
+        string palabra;
         public MainWindow()
         {
 
             InitializeComponent();
 
-            //Crear botones
+            CrearBotones();
+            imagenes = new List<BitmapImage>();
+            CargarImagen();
+            OfuscarPalabra();
+
+            //NuevaPartidaButton.Click += Nueva_Partida;
+            //RendirseButton.Click += Rendirse;
+
+            //palabra = new TextBlock();
+            //ScrollViewer scroll = new ScrollViewer();
+            //scroll.Content = palabra;
+            //scroll.HorizontalScrollBarVisibility = ScrollBarVisibility.Visible;
+            //scroll.VerticalScrollBarVisibility = ScrollBarVisibility.Hidden;
+
+            //PalabraWrapPanel.Children.Add(scroll);
+            //palabra.Style = (Style)Application.Current.Resources["contenedorPalabra"];
+
+            //palabraSecreta = PalabraRandom();
+
+            ////palabraArray = palabraSecreta.ToCharArray(0, palabraSecreta.Length - 1);
+            //adivinar = palabraSecreta;
+
+            //OfuscaPalabra(palabraSecreta, palabra);
+        }
 
 
-            List<Char> abcedario = Enumerable.Range('A', 'Z' - 'A' + 1).Select(i => (Char)i).ToList<Char>();
+        public void CrearBotones()
+        {
+            abcedario = Enumerable.Range('A', 'Z' - 'A' + 1).Select(i => (Char)i).ToList<Char>();
             abcedario.Insert(14, 'Ñ');
 
             foreach (var letra in abcedario)
@@ -51,86 +74,91 @@ namespace Ahorcado
                 letras.Click += Button_Click;
                 letras.Style = (Style)Application.Current.Resources["botonesLetra"];
             }
-
-            NuevaPartidaButton.Click += Nueva_Partida;
-            RendirseButton.Click += Rendirse;
-
-            palabra = new TextBlock();
-            ScrollViewer scroll = new ScrollViewer();
-            scroll.Content = palabra;
-            scroll.HorizontalScrollBarVisibility = ScrollBarVisibility.Visible;
-            scroll.VerticalScrollBarVisibility = ScrollBarVisibility.Hidden;
-
-            PalabraWrapPanel.Children.Add(scroll);
-            palabra.Style = (Style)Application.Current.Resources["contenedorPalabra"];
-
-            palabraSecreta = PalabraRandom();
-
-            //palabraArray = palabraSecreta.ToCharArray(0, palabraSecreta.Length - 1);
-            adivinar = palabraSecreta;
-
-            OfuscaPalabra(palabraSecreta, palabra);
         }
-        private String OfuscaPalabra(String cadena, TextBlock contenedor)
+
+        private void CargarImagen()
         {
-            for (int i = 0; i < cadena.Length; i++)
-                contenedor.Text = sb.Append("_").ToString();
-            return sb.ToString();
+            for (int i = 0; i < 7; i++)
+            {
+                var imagen = new BitmapImage(new Uri("/assets/img/" + i.ToString() + "jpg"));
+                imagenes.Add(imagen);
+            }
         }
 
-        public String PalabraRandom()
+        private string PalabraRandom()
         {
             Random gen = new Random();
             List<String> listaPalabras = new List<string>() { "MURCIA", "MOJACA", "LERIDA", "PAMPLONA", "ALBACETE" };
             return listaPalabras[gen.Next(listaPalabras.Count)];
         }
 
+        private void OfuscarPalabra()
+        {
+            this.palabra = PalabraRandom();
+            EstadoJugadorImage.Source = imagenes[4];
+
+            ScrollViewer scroll = new ScrollViewer();
+            scroll.Content = camposTexto;
+            scroll.HorizontalScrollBarVisibility = ScrollBarVisibility.Visible;
+            scroll.VerticalScrollBarVisibility = ScrollBarVisibility.Hidden;
+            PalabraWrapPanel.Children.Add(scroll);
+        }
+
+        //private String OfuscaPalabra(String cadena, TextBlock contenedor)
+        //{
+        //    for (int i = 0; i < cadena.Length; i++)
+        //        contenedor.Text = sb.Append("_").ToString();
+        //    return sb.ToString();
+        //}
+
+        
+
 
         public void Comprobar(char letra)
         {
             
-                for (int i = 0; i < adivinar.Length; i++)
-                {
-                    if (letra == adivinar[i])
-                        sb[i] += letra;
+                //for (int i = 0; i < adivinar.Length; i++)
+                //{
+                //    if (letra == adivinar[i])
+                //        sb[i] += letra;
 
-                }
+                //}
 
-                if (estado <= 9)
-                {
-                    estado++;
-                    EstadoJugadorImage.Source = GetStageImage();
-                }
-                else
-                {
-                    FinalizarPartida();
-                }
+                //if (estado <= 9)
+                //{
+                //    estado++;
+                //    EstadoJugadorImage.Source = GetStageImage();
+                //}
+                //else
+                //{
+                //    FinalizarPartida();
+                //}
 
-                Console.WriteLine();
+                //Console.WriteLine();
             
         }
 
-        public BitmapImage GetStageImage()
-        {
-            return new BitmapImage(
-                new Uri(System.IO.Path.Combine(
-                    Environment.CurrentDirectory,
-                    "../../../assets/img/" + estado + ".jpg")));
-        }
+        //public BitmapImage GetStageImage()
+        //{
+        //    return new BitmapImage(
+        //        new Uri(System.IO.Path.Combine(
+        //            Environment.CurrentDirectory,
+        //            "../../../assets/img/" + estado + ".jpg")));
+        //}
 
         
 
-        public void GanarPartida()
-        {
-            MessageBox.Show("La palabra era " + adivinar);
-        }
-        public void FinalizarPartida()
-        {
-            estado = 4;
-            EstadoJugadorImage.Source = GetStageImage();
+        //public void GanarPartida()
+        //{
+        //    MessageBox.Show("La palabra era " + adivinar);
+        //}
+        //public void FinalizarPartida()
+        //{
+        //    estado = 4;
+        //    EstadoJugadorImage.Source = GetStageImage();
 
-            MessageBox.Show("Lo siento era " + adivinar);
-        }
+        //    MessageBox.Show("Lo siento era " + adivinar);
+        //}
 
         //EVENTOS
         private void Button_Click(object sender, RoutedEventArgs e)
@@ -141,24 +169,24 @@ namespace Ahorcado
             Comprobar(letraTeclado);
         }
 
-        private void Nueva_Partida(object sender, RoutedEventArgs e)
-        {
-            estado = 4;
-            EstadoJugadorImage.Source = GetStageImage();
+        //private void Nueva_Partida(object sender, RoutedEventArgs e)
+        //{
+        //    estado = 4;
+        //    EstadoJugadorImage.Source = GetStageImage();
 
-            foreach (Button b in LetrasUniformGrid.Children)
-            {
-                b.IsEnabled = true;
-            }
-            MessageBox.Show("Nueva Partida");
-        }
+        //    foreach (Button b in LetrasUniformGrid.Children)
+        //    {
+        //        b.IsEnabled = true;
+        //    }
+        //    MessageBox.Show("Nueva Partida");
+        //}
 
-        private void Rendirse(object sender, RoutedEventArgs e)
-        {
-            estado = 10;
-            EstadoJugadorImage.Source = GetStageImage();
-            MessageBox.Show("Te has rendido \nLa palabra era " + adivinar);
-        }
+        //private void Rendirse(object sender, RoutedEventArgs e)
+        //{
+        //    estado = 10;
+        //    EstadoJugadorImage.Source = GetStageImage();
+        //    MessageBox.Show("Te has rendido \nLa palabra era " + adivinar);
+        //}
 
         private void Window_KeyDown(object sender, KeyEventArgs e)
         {
