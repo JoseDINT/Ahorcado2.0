@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
+using System.IO;
 using System.Linq;
+using System.Media;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -25,35 +28,19 @@ namespace Ahorcado
         List<BitmapImage> imagenes;
         List<TextBlock> camposTexto;
         string palabra;
+        int fallos = 0;
+
+
         public MainWindow()
         {
 
             InitializeComponent();
-
             CrearBotones();
             imagenes = new List<BitmapImage>();
-            CargarImagen();
-            OfuscarPalabra();
+            EmpezarPartida();
 
-            //NuevaPartidaButton.Click += Nueva_Partida;
-            //RendirseButton.Click += Rendirse;
-
-            //palabra = new TextBlock();
-            //ScrollViewer scroll = new ScrollViewer();
-            //scroll.Content = palabra;
-            //scroll.HorizontalScrollBarVisibility = ScrollBarVisibility.Visible;
-            //scroll.VerticalScrollBarVisibility = ScrollBarVisibility.Hidden;
-
-            //PalabraWrapPanel.Children.Add(scroll);
-            //palabra.Style = (Style)Application.Current.Resources["contenedorPalabra"];
-
-            //palabraSecreta = PalabraRandom();
-
-            ////palabraArray = palabraSecreta.ToCharArray(0, palabraSecreta.Length - 1);
-            //adivinar = palabraSecreta;
-
-            //OfuscaPalabra(palabraSecreta, palabra);
         }
+
 
 
         public void CrearBotones()
@@ -72,15 +59,34 @@ namespace Ahorcado
                 letras.Content = box;
                 LetrasUniformGrid.Children.Add(letras);
                 letras.Click += Button_Click;
-                letras.Style = (Style)Application.Current.Resources["botonesLetra"];
+                letras.Style = (Style)this.Resources["botonesLetra"];
             }
+        }
+
+        private void EmpezarPartida()
+        {
+
+            CargarImagen();
+            PalabraWrapPanel.Children.Clear();
+            OfuscarPalabra();
+        }
+
+        private void SonidoAcierto()
+        {
+
+            SoundPlayer player = new SoundPlayer(@"../../../assets/mp3/acierto.wav");
+            player.Load();
+            player.Play();
         }
 
         private void CargarImagen()
         {
-            for (int i = 0; i < 7; i++)
+            for (int i = 4; i < 11; i++)
             {
-                var imagen = new BitmapImage(new Uri("/assets/img/" + i.ToString() + "jpg"));
+                var imagen = new BitmapImage(
+                new Uri(System.IO.Path.Combine(
+                    Environment.CurrentDirectory,
+                    "../../../assets/img/" + i.ToString() + ".jpg")));
                 imagenes.Add(imagen);
             }
         }
@@ -88,105 +94,107 @@ namespace Ahorcado
         private string PalabraRandom()
         {
             Random gen = new Random();
-            List<String> listaPalabras = new List<string>() { "MURCIA", "MOJACA", "LERIDA", "PAMPLONA", "ALBACETE" };
+            List<string> listaPalabras = System.IO.File.ReadAllLines(@"../../../assets/palabras.txt").ToList();
             return listaPalabras[gen.Next(listaPalabras.Count)];
         }
 
         private void OfuscarPalabra()
         {
+            fallos = 0;
             this.palabra = PalabraRandom();
-            EstadoJugadorImage.Source = imagenes[4];
+            EstadoJugadorImage.Source = imagenes[0];
+            camposTexto = new List<TextBlock>();
 
-            ScrollViewer scroll = new ScrollViewer();
-            scroll.Content = camposTexto;
-            scroll.HorizontalScrollBarVisibility = ScrollBarVisibility.Visible;
-            scroll.VerticalScrollBarVisibility = ScrollBarVisibility.Hidden;
-            PalabraWrapPanel.Children.Add(scroll);
+            for (int i = 0; i < this.palabra.Length; i++)
+            {
+                TextBlock textBlock = new TextBlock()
+                {
+                    Text = "_",
+                };
+                textBlock.Style = (Style)this.Resources["letrasTextBlock"];
+                PalabraWrapPanel.Children.Add(textBlock);
+                camposTexto.Add(textBlock);
+            }
         }
 
-        //private String OfuscaPalabra(String cadena, TextBlock contenedor)
-        //{
-        //    for (int i = 0; i < cadena.Length; i++)
-        //        contenedor.Text = sb.Append("_").ToString();
-        //    return sb.ToString();
-        //}
-
-        
-
-
-        public void Comprobar(char letra)
+        public void Comprobar(string letra)
         {
-            
-                //for (int i = 0; i < adivinar.Length; i++)
-                //{
-                //    if (letra == adivinar[i])
-                //        sb[i] += letra;
+            bool acierto = false;
 
-                //}
+            for (int i = 0; i < this.palabra.Length; i++)
+            {
+                if (this.palabra[i].ToString() == letra)
+                {
+                    SonidoAcierto();
+                    acierto = true;
+                    camposTexto[i].Text = letra;
+                }
+            }
+            if (acierto == false)
+            {
 
-                //if (estado <= 9)
-                //{
-                //    estado++;
-                //    EstadoJugadorImage.Source = GetStageImage();
-                //}
-                //else
-                //{
-                //    FinalizarPartida();
-                //}
+                fallos++;
+                EstadoJugadorImage.Source = imagenes[fallos];
+            }
+            if (fallos == 6)
+            {
+                PerderPartida();
+            }
+            int contador = 0;
+            for (int i = 0; i < this.palabra.Length; i++)
+            {
+                if (camposTexto[i].Text != "_")
+                    contador++;
+            }
+            if (contador == this.palabra.Length)
+            {
+                GanarPartida();
+            }
 
-                //Console.WriteLine();
-            
         }
 
-        //public BitmapImage GetStageImage()
-        //{
-        //    return new BitmapImage(
-        //        new Uri(System.IO.Path.Combine(
-        //            Environment.CurrentDirectory,
-        //            "../../../assets/img/" + estado + ".jpg")));
-        //}
+        public void GanarPartida()
+        {
+            RendirseButton.IsEnabled = false;
+            MessageBox.Show("Correcto la palabra era " + palabra, "Ganaste", MessageBoxButton.OK, MessageBoxImage.Information);
 
-        
+        }
+        public void PerderPartida()
+        {
 
-        //public void GanarPartida()
-        //{
-        //    MessageBox.Show("La palabra era " + adivinar);
-        //}
-        //public void FinalizarPartida()
-        //{
-        //    estado = 4;
-        //    EstadoJugadorImage.Source = GetStageImage();
+            EstadoJugadorImage.Source = imagenes[6];
+            MessageBox.Show("Lo siento era " + palabra, "Perdiste", MessageBoxButton.OK, MessageBoxImage.Error);
+        }
 
-        //    MessageBox.Show("Lo siento era " + adivinar);
-        //}
-
-        //EVENTOS
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             Button boton = (Button)sender;
+
+            string letra = boton.Tag.ToString();
+
+            Comprobar(letra);
             boton.IsEnabled = false;
-            char letraTeclado = (char)boton.Tag;
-            Comprobar(letraTeclado);
         }
 
-        //private void Nueva_Partida(object sender, RoutedEventArgs e)
-        //{
-        //    estado = 4;
-        //    EstadoJugadorImage.Source = GetStageImage();
+        private void Nueva_Partida(object sender, RoutedEventArgs e)
+        {
+            EmpezarPartida();
 
-        //    foreach (Button b in LetrasUniformGrid.Children)
-        //    {
-        //        b.IsEnabled = true;
-        //    }
-        //    MessageBox.Show("Nueva Partida");
-        //}
+            if (RendirseButton.IsEnabled == false) RendirseButton.IsEnabled = true;
 
-        //private void Rendirse(object sender, RoutedEventArgs e)
-        //{
-        //    estado = 10;
-        //    EstadoJugadorImage.Source = GetStageImage();
-        //    MessageBox.Show("Te has rendido \nLa palabra era " + adivinar);
-        //}
+            foreach (Button b in LetrasUniformGrid.Children)
+            {
+                b.IsEnabled = true;
+            }
+            MessageBox.Show("Generando Nueva Palabra", "Nueva Partida", MessageBoxButton.OK, MessageBoxImage.Information);
+        }
+
+        private void Rendirse(object sender, RoutedEventArgs e)
+        {
+            RendirseButton.IsEnabled = false;
+            EstadoJugadorImage.Source = imagenes[6];
+            MessageBox.Show("La palabra era " + palabra, "Te has rendido", MessageBoxButton.OK, MessageBoxImage.Error);
+        }
 
         private void Window_KeyDown(object sender, KeyEventArgs e)
         {
@@ -196,7 +204,7 @@ namespace Ahorcado
                 if (b.Tag.ToString() == e.Key.ToString())
                 {
                     b.IsEnabled = false;
-                    Comprobar((char)b.Tag);
+                    Comprobar(b.Tag.ToString());
                 }
             }
 
