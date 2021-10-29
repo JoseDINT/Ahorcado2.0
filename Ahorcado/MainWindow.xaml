@@ -34,8 +34,8 @@
         <!--Titulo Ahorcado-->
         <TextBlock Grid.Row="0" Grid.Column="1" FontSize="35">Ahorcado</TextBlock>
 
-        <WrapPanel Grid.Row="1" Grid.Column="1" x:Name="PalabraWrapPanel">
-            
+        <WrapPanel Grid.Row="1" Grid.Column="1" x:Name="PalabraWrapPanel" Style="{StaticResource contenedorWrapPanel}">
+
         </WrapPanel>
         <UniformGrid Grid.Row="2" Grid.Column="1" x:Name="LetrasUniformGrid" Rows="3" Columns="9" Margin="20">
 

@@ -26,6 +26,7 @@ namespace Ahorcado
         StringBuilder sb = new StringBuilder();
         String adivinar;
         TextBlock palabra;
+        private int estado = 4;
         public MainWindow()
         {
 
@@ -54,60 +55,45 @@ namespace Ahorcado
             NuevaPartidaButton.Click += Nueva_Partida;
             RendirseButton.Click += Rendirse;
 
-            //this es para la ventana actual y si queremos hacer referencia al
-            //app.xmal usaremos Application.Current.Rs
-
             palabra = new TextBlock();
             ScrollViewer scroll = new ScrollViewer();
             scroll.Content = palabra;
             scroll.HorizontalScrollBarVisibility = ScrollBarVisibility.Visible;
             scroll.VerticalScrollBarVisibility = ScrollBarVisibility.Hidden;
-            //Para los scrollview
+
             PalabraWrapPanel.Children.Add(scroll);
             palabra.Style = (Style)Application.Current.Resources["contenedorPalabra"];
 
             palabraSecreta = PalabraRandom();
 
-            palabraArray = palabraSecreta.ToCharArray(0, palabraSecreta.Length - 1);
+            //palabraArray = palabraSecreta.ToCharArray(0, palabraSecreta.Length - 1);
             adivinar = palabraSecreta;
-
 
             OfuscaPalabra(palabraSecreta, palabra);
         }
+        private String OfuscaPalabra(String cadena, TextBlock contenedor)
+        {
+            for (int i = 0; i < cadena.Length; i++)
+                contenedor.Text = sb.Append("_").ToString();
+            return sb.ToString();
+        }
 
-        private int estado = 4;
+        public String PalabraRandom()
+        {
+            Random gen = new Random();
+            List<String> listaPalabras = new List<string>() { "MURCIA", "MOJACA", "LERIDA", "PAMPLONA", "ALBACETE" };
+            return listaPalabras[gen.Next(listaPalabras.Count)];
+        }
+
+
         public void Comprobar(char letra)
         {
-            //for (int i = 0; i < length; i++)
-            //if (estado <= 9)
-            //{
-            //    estado++;
-            //    EstadoJugadorImage.Source = GetStageImage();
-            //}
-            //else
-            //{
-            //    FinalizarPartida();
-            //}
-            bool terminado = false;
-            do
-            {
-                string siguienteMostrar = "";
-
+            
                 for (int i = 0; i < adivinar.Length; i++)
                 {
                     if (letra == adivinar[i])
                         sb[i] += letra;
-                    else
-                        sb[i] += sb[i];
-                }
-                String siguienteMostar = sb.ToString();
 
-                // 6: Comprobar si ha terminado: si el usuario se queda sin intentos
-                // o adivina toda la palabra.
-                if (siguienteMostar.IndexOf("-") < 0)
-                {
-                    GanarPartida();
-                    terminado = true;
                 }
 
                 if (estado <= 9)
@@ -121,8 +107,7 @@ namespace Ahorcado
                 }
 
                 Console.WriteLine();
-            }
-            while (!terminado);
+            
         }
 
         public BitmapImage GetStageImage()
@@ -133,20 +118,7 @@ namespace Ahorcado
                     "../../../assets/img/" + estado + ".jpg")));
         }
 
-        private String OfuscaPalabra(String cadena, TextBlock contenedor)
-        {
-            for (int i = 0; i < cadena.Length; i++)
-                contenedor.Text = sb.Append("_").ToString();
-            return sb.ToString();
-
-        }
-
-        public String PalabraRandom()
-        {
-            Random gen = new Random();
-            List<String> listaPalabras = new List<string>() { "MURCIA", "MOJACA" };
-            return listaPalabras[gen.Next(0, listaPalabras.Count)];
-        }
+        
 
         public void GanarPartida()
         {
@@ -157,7 +129,7 @@ namespace Ahorcado
             estado = 4;
             EstadoJugadorImage.Source = GetStageImage();
 
-            MessageBox.Show("Lo siento era" + adivinar);
+            MessageBox.Show("Lo siento era " + adivinar);
         }
 
         //EVENTOS
@@ -173,7 +145,7 @@ namespace Ahorcado
         {
             estado = 4;
             EstadoJugadorImage.Source = GetStageImage();
-            //Hay que hacer un foreach de los botones que tenemos del children del contenedor 
+
             foreach (Button b in LetrasUniformGrid.Children)
             {
                 b.IsEnabled = true;
@@ -185,7 +157,7 @@ namespace Ahorcado
         {
             estado = 10;
             EstadoJugadorImage.Source = GetStageImage();
-            MessageBox.Show("Te has rendido");
+            MessageBox.Show("Te has rendido \nLa palabra era " + adivinar);
         }
 
         private void Window_KeyDown(object sender, KeyEventArgs e)
